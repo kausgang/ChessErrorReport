@@ -80,7 +80,7 @@ function App() {
         value={orientation}
         exclusive
         onChange={setPlayAs}
-        aria-label="Platform"
+        // aria-label="Platform"
       >
         <ToggleButton value="white">white</ToggleButton>
         <ToggleButton value="black">Black</ToggleButton>

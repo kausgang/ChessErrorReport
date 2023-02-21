@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Chessboard from "chessboardjsx";
-// import { Chess } from "chess.js";
 
 function Board(props) {
   const game = props.game;
@@ -9,7 +8,7 @@ function Board(props) {
   const [pgn, setPgn] = useState("");
 
   useEffect(() => {
-    setFen(props.game.fen()); //fen holds the position reached after dropping this piece
+    setFen(props.game.fen());
   });
 
   const onDrop = ({ sourceSquare, targetSquare }) => {
