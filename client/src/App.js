@@ -1,45 +1,71 @@
 import logo from "./logo.svg";
 import "./App.css";
+import Board from "./Board";
+import React, { useState, useEffect } from "react";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+// import axios from "axios";
 
-import axios from "axios";
-
-const test_click = () => {
-  // alert("test");
-  axios
-    .get("http://localhost:4000/")
-    .then((res) => {
-      console.log(res);
-    })
-    .catch(function (error) {
-      // handle error
-      console.log(error);
-    })
-    .finally(function () {
-      // always executed
-    });
-};
+// const test_click = () => {
+//   // alert("test");
+//   axios
+//     .get("http://localhost:4000/")
+//     .then((res) => {
+//       console.log(res);
+//     })
+//     .catch(function (error) {
+//       // handle error
+//       console.log(error);
+//     })
+//     .finally(function () {
+//       // always executed
+//     });
+// };
 
 var engine = new Worker("stockfish.js");
 
 function App() {
-  // var stockfish1 = stockfish();
-  let fen = "rnbqkbnr/pp2pppp/3p4/2pP4/2P5/8/PP2PPPP/RNBQKBNR b KQkq - 0 3";
+  //ENGINE ANALYSIS LOGIC BELOW
 
-  let depth = 10;
-  engine.postMessage("position fen " + fen);
-  engine.postMessage("go depth " + depth);
+  // let fen = "rnbqkbnr/pp2pppp/3p4/2pP4/2P5/8/PP2PPPP/RNBQKBNR b KQkq - 0 3";
 
-  engine.onmessage = function (line) {
-    // console.log(line.data);
+  // let depth = 10;
+  // engine.postMessage("position fen " + fen);
+  // engine.postMessage("go depth " + depth);
 
-    let last_line = line.data.match("info depth " + depth);
-    let best_move = line.data.match(/bestmove\s+(\S+)/);
-    if (last_line) console.log(last_line);
-    if (best_move) console.log(best_move[1]);
+  // engine.onmessage = function (line) {
+  //   // console.log(line.data);
+
+  //   let last_line = line.data.match("info depth " + depth);
+  //   let best_move = line.data.match(/bestmove\s+(\S+)/);
+  //   if (last_line) console.log(last_line);
+  //   if (best_move) console.log(best_move[1]);
+  // };
+
+  const [orientation, setOrientation] = useState("white");
+
+  const onLegalMove = (fen, history, pgn) => {
+    console.log("fen=", fen, "history=", history, "pgn=", pgn);
+  };
+
+  const setPlayAs = (event, playas) => {
+    setOrientation(playas);
   };
   return (
     <>
-      <button onClick={test_click}>test</button>
+      {/* <button onClick={test_click}>test</button> */}
+      <Board onLegalMove={onLegalMove} orientation={orientation} />
+
+      <ToggleButtonGroup
+        color="primary"
+        value={orientation}
+        exclusive
+        onChange={setPlayAs}
+        aria-label="Platform"
+      >
+        <ToggleButton value="white">white</ToggleButton>
+        <ToggleButton value="black">Black</ToggleButton>
+      </ToggleButtonGroup>
     </>
   );
 }
