@@ -21,6 +21,18 @@ function Board(props) {
 
       setFen(props.game.fen()); //fen holds the position reached after dropping this piece
 
+      // check which side to move
+      let game_history = game.history();
+      let sideToMove = game_history[game_history.length - 1].turn;
+      console.log(sideToMove);
+
+      sideToMove === "w"
+        ? props.changeSideToMove("b")
+        : props.changeSideToMove("w");
+
+      // props.changeSideToMove("b");
+      // (props)
+
       //   game.move({
       //     from: sourceSquare,
       //     to: targetSquare,
