@@ -1,6 +1,7 @@
 import logo from "./logo.svg";
 import "./App.css";
 import Board from "./Board";
+import { Chess } from "chess.js";
 import React, { useState, useEffect } from "react";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
@@ -42,19 +43,37 @@ function App() {
   //   if (best_move) console.log(best_move[1]);
   // };
 
+  const [game, setGame] = useState(new Chess());
+  const [fen, setFen] = useState("start");
   const [orientation, setOrientation] = useState("white");
 
-  const onLegalMove = (fen, history, pgn) => {
-    console.log("fen=", fen, "history=", history, "pgn=", pgn);
+  // const onLegalMove = (fen, history, pgn) => {
+  //   console.log("fen=", fen, "history=", history, "pgn=", pgn);
+  // };
+
+  const onLegalMove = (game) => {
+    // console.log("game=", game);
   };
 
   const setPlayAs = (event, playas) => {
     setOrientation(playas);
   };
+
+  const TestEngineMove = () => {
+    game.move("e5");
+    setFen(game.fen());
+  };
   return (
     <>
       {/* <button onClick={test_click}>test</button> */}
-      <Board onLegalMove={onLegalMove} orientation={orientation} />
+      <button onClick={TestEngineMove}>TestEngineMove</button>
+      {/* <Board onLegalMove={onLegalMove} orientation={orientation} /> */}
+      <Board
+        onLegalMove={onLegalMove}
+        orientation={orientation}
+        game={game}
+        position={fen}
+      />
 
       <ToggleButtonGroup
         color="primary"
