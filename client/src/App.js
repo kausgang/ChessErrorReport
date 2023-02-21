@@ -5,7 +5,6 @@ import { Chess } from "chess.js";
 import React, { useState, useEffect } from "react";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import EngineMove from "./engineMove";
 
 // import axios from "axios";
 
@@ -51,6 +50,8 @@ function App() {
   const [engineMove, setEngineMove] = useState("");
   const [sideToMove, setSideToMove] = useState("w");
 
+  // console.log(sideToMove);
+
   // const onLegalMove = (fen, history, pgn) => {
   //   console.log("fen=", fen, "history=", history, "pgn=", pgn);
   // };
@@ -64,12 +65,15 @@ function App() {
 
   const setPlayAs = (event, playas) => {
     setOrientation(playas);
+    //if black is played - start the game
     changeSideToMove("w");
+    // disable the black button after it has been clicked once
+    event.target.disabled = "true";
   };
 
   const changeSideToMove = (side) => {
+    // console.log(side);
     setSideToMove(side);
-    console.log(side);
 
     let fen = game.fen();
 
@@ -96,9 +100,8 @@ function App() {
   return (
     <>
       {/* <button onClick={test_click}>test</button> */}
-      <button onClick={TestEngineMove}>TestEngineMove</button>
+      {/* <button onClick={TestEngineMove}>TestEngineMove</button> */}
       {/* <Board onLegalMove={onLegalMove} orientation={orientation} /> */}
-      {/* <EngineMove /> */}
 
       <Board
         onLegalMove={onLegalMove}
@@ -114,10 +117,11 @@ function App() {
         value={orientation}
         exclusive
         onChange={setPlayAs}
+        // disabled
         // aria-label="Platform"
       >
-        <ToggleButton value="white">white</ToggleButton>
-        <ToggleButton value="black">Black</ToggleButton>
+        {/* <ToggleButton value="white">white</ToggleButton> */}
+        <ToggleButton value="black">Play as Black</ToggleButton>
       </ToggleButtonGroup>
     </>
   );
