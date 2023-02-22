@@ -5,6 +5,7 @@ import { Chess } from "chess.js";
 import React, { useState, useEffect } from "react";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import MoveTable from "./MoveTable";
 
 // import axios from "axios";
 
@@ -49,6 +50,7 @@ function App() {
   const [orientation, setOrientation] = useState("white");
   const [engineMove, setEngineMove] = useState("");
   const [sideToMove, setSideToMove] = useState("w");
+  const [moves, setMoves] = useState([]);
 
   // console.log(sideToMove);
 
@@ -61,6 +63,13 @@ function App() {
     // if (sideToMove === "b") {
     // setSideToMove("w");
     // }
+    // let history = game.history({ verbose: true });
+    // let sanMove;
+    // if (history.length !== 0) {
+    //   sanMove = history[history.length - 1].san;
+    //   console.log(sanMove);
+    // }
+    // setMoves([...moves, { id: Math.random(), white: "", black: "e5" }]);
   };
 
   const setPlayAs = (event, playas) => {
@@ -86,6 +95,7 @@ function App() {
 
       let last_line = line.data.match("info depth " + depth);
       let best_move = line.data.match(/bestmove\s+(\S+)/);
+
       // if (last_line) console.log(last_line);
       // if (best_move) console.log(best_move[1]);
       game.move(best_move[1]);
@@ -93,10 +103,10 @@ function App() {
     };
   };
 
-  const TestEngineMove = () => {
-    game.move("e5");
-    setFen(game.fen());
-  };
+  // const TestEngineMove = () => {
+  //   game.move("e5");
+  //   setFen(game.fen());
+  // };
   return (
     <>
       {/* <button onClick={test_click}>test</button> */}
@@ -108,19 +118,16 @@ function App() {
         orientation={orientation}
         game={game}
         position={fen}
-        // sideToMove={sideToMove}
         changeSideToMove={changeSideToMove}
       />
-
+      {/* <MoveTable moves={moves} /> */}
       <ToggleButtonGroup
         color="primary"
         value={orientation}
         exclusive
         onChange={setPlayAs}
-        // disabled
-        // aria-label="Platform"
       >
-        {/* <ToggleButton value="white">white</ToggleButton> */}
+        <ToggleButton value="white">white</ToggleButton>
         <ToggleButton value="black">Play as Black</ToggleButton>
       </ToggleButtonGroup>
     </>
