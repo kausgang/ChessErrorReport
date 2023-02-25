@@ -9,7 +9,7 @@ import MoveTable from "./MoveTable";
 import EngineLevel from "./EngineLevel";
 import Status from "./Status";
 
-// import axios from "axios";
+import axios from "axios";
 
 // const test_click = () => {
 //   // alert("test");
@@ -150,6 +150,20 @@ function App() {
     setCp(cp_value);
   };
 
+  const sendToServer = () => {
+    axios
+      .get("http://localhost:4000/")
+      .then((res) => {
+        console.log(res);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+      .finally(function () {
+        // always executed
+      });
+  };
   // const TestEngineMove = () => {
   //   game.move("e5");
   //   setFen(game.fen());
@@ -183,6 +197,8 @@ function App() {
         <ToggleButton value="white">white</ToggleButton>
         <ToggleButton value="black">Play as Black</ToggleButton>
       </ToggleButtonGroup>
+
+      <button onClick={sendToServer}>sendToServer</button>
     </>
   );
 }
