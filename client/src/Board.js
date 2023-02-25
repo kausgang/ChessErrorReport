@@ -13,39 +13,62 @@ function Board(props) {
 
   useEffect(() => {
     setFen(props.game.fen());
-
-    // let fen = props.game.fen();
-
-    // let depth = 10;
-    // engine.postMessage("position fen " + fen);
-    // engine.postMessage("go depth " + depth);
-
-    // engine.onmessage = function (line) {
-    //   // console.log(line.data);
-
-    //   let last_line = line.data.match("info depth " + depth);
-    //   let best_move = line.data.match(/bestmove\s+(\S+)/);
-
-    //   if (last_line !== null) {
-    //     // console.log(last_line.input);
-    //     let cp_substr_start = last_line.input.indexOf("cp") + 3;
-    //     let cp_substr_end = last_line.input.indexOf("nodes") - 1;
-    //     let cp_value = last_line.input.substring(
-    //       cp_substr_start,
-    //       cp_substr_end
-    //     );
-    //     // console.log("cp value = ", cp_value / 100);
-    //     setCp(cp_value / 100);
-    //   }
-    //   // console.log(best_move[1]);
-
-    //   // if (last_line.input !== null) console.log("indexof cp is = ");
-    // };
   });
+
+  const calculate_cp = (fen, sourceSquare, targetSquare) => {
+    let depth = 5;
+    engine.postMessage("position fen " + fen);
+    engine.postMessage("go depth " + depth);
+
+    engine.onmessage = function (line) {
+      // console.log(line.data);
+
+      let last_line = line.data.match("info depth " + depth);
+      let best_move = line.data.match(/bestmove\s+(\S+)/);
+
+      if (last_line !== null) {
+        // console.log(last_line.input);
+        let cp_substr_start = last_line.input.indexOf("cp") + 3;
+        let cp_substr_end = last_line.input.indexOf("nodes") - 1;
+        let cp_value = last_line.input.substring(
+          cp_substr_start,
+          cp_substr_end
+        );
+
+        props.updateCp(cp_value / 100);
+      }
+
+      try {
+        props.game.move({
+          from: sourceSquare,
+          to: targetSquare,
+          promotion: "q", // always promote to a queen for example simplicity
+        });
+
+        setFen(props.game.fen()); //fen holds the position reached after dropping this piece
+
+        // calculate_cp(fen);
+        // check which side to move
+        let game_history = props.game.history({ verbose: true });
+        // console.log(game_history);
+        let sideToMove = game_history[game_history.length - 1].color;
+        console.log(sideToMove);
+
+        sideToMove === "w"
+          ? props.changeSideToMove("b")
+          : props.changeSideToMove("w");
+      } catch (error) {
+        console.log("illigal move");
+      }
+    };
+  };
 
   const onDrop = ({ sourceSquare, targetSquare }) => {
     let fen = props.game.fen();
 
+    calculate_cp(fen, sourceSquare, targetSquare);
+
+    /* UNHIDE THIS
     let depth = 15;
     engine.postMessage("position fen " + fen);
     engine.postMessage("go depth " + depth);
@@ -64,36 +87,37 @@ function Board(props) {
           cp_substr_start,
           cp_substr_end
         );
-        // console.log("cp value = ", cp_value / 100);
-        // setCp(cp_value / 100);
+
         props.updateCp(cp_value / 100);
       }
-      // console.log(best_move[1]);
-
-      // if (last_line.input !== null) console.log("indexof cp is = ");
+    
     };
 
-    try {
-      props.game.move({
-        from: sourceSquare,
-        to: targetSquare,
-        promotion: "q", // always promote to a queen for example simplicity
-      });
 
-      setFen(props.game.fen()); //fen holds the position reached after dropping this piece
+    */
 
-      // check which side to move
-      let game_history = props.game.history({ verbose: true });
-      // console.log(game_history);
-      let sideToMove = game_history[game_history.length - 1].color;
-      console.log(sideToMove);
+    // try {
+    //   props.game.move({
+    //     from: sourceSquare,
+    //     to: targetSquare,
+    //     promotion: "q", // always promote to a queen for example simplicity
+    //   });
 
-      sideToMove === "w"
-        ? props.changeSideToMove("b")
-        : props.changeSideToMove("w");
-    } catch (error) {
-      console.log("illigal move");
-    }
+    //   setFen(props.game.fen()); //fen holds the position reached after dropping this piece
+
+    //   calculate_cp(fen);
+    //   // check which side to move
+    //   let game_history = props.game.history({ verbose: true });
+    //   // console.log(game_history);
+    //   let sideToMove = game_history[game_history.length - 1].color;
+    //   console.log(sideToMove);
+
+    //   sideToMove === "w"
+    //     ? props.changeSideToMove("b")
+    //     : props.changeSideToMove("w");
+    // } catch (error) {
+    //   console.log("illigal move");
+    // }
   };
   return (
     <>
@@ -109,7 +133,7 @@ function Board(props) {
         }}
       />
       {/* <Status cp_value={cp} /> */}
-      <Status cp_value={props.cp} />
+      {/* <Status cp_value={props.cp} /> */}
     </>
   );
 }

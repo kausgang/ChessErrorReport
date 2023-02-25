@@ -7,6 +7,7 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import MoveTable from "./MoveTable";
 import EngineLevel from "./EngineLevel";
+import Status from "./Status";
 
 // import axios from "axios";
 
@@ -134,8 +135,6 @@ function App() {
         orientation === "white"
           ? setCp(-cp_value / 100)
           : setCp(cp_value / 100);
-        // setCp(cp_value / 100);
-        // sideToMove === "w" ? setCp(-cp_value / 100) : setCp(cp_value / 100);
       }
 
       if (best_move[1] !== null) game.move(best_move[1]);
@@ -167,10 +166,11 @@ function App() {
         game={game}
         position={fen}
         changeSideToMove={changeSideToMove}
-        cp={cp}
+        // cp={cp}
         updateCp={updateCp}
         depth={depth}
       />
+      <Status cp_value={cp} />
       <EngineLevel onsetDepth={onsetDepth} />
 
       {/* <MoveTable moves={moves} /> */}
