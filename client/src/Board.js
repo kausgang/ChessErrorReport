@@ -129,7 +129,7 @@ function Board(props) {
         width={450}
         position={fen}
         onDrop={onDrop}
-        onLegalMove={props.onLegalMove(game)}
+        // onLegalMove={props.onLegalMove(game)}
         orientation={props.orientation}
         boardStyle={{
           borderRadius: "5px",

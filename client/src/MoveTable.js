@@ -18,15 +18,17 @@ function MoveTable(props) {
     //   { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
     //   { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
     //   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-    { id: 1, white: "e4", black: "" },
+    // { id: M, white: "e4", black: "" },
     // { id: 2, white: "", black: "e5" },
   ];
+
+  console.log(props.moves);
   return (
     <div style={{ height: 450, width: "30%" }}>
       <DataGrid
         // rows={rows}
 
-        rows={props.moves}
+        rows={[{ id: Math.random(), white: props.moves }]}
         columns={columns}
       />
     </div>

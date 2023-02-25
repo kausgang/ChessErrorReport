@@ -11,6 +11,8 @@ import Status from "./Status";
 import Button from "@mui/material/Button";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import Grid from "@mui/material/Unstable_Grid2";
+import Stack from "@mui/material/Stack";
 
 import axios from "axios";
 import ShowMoves from "./ShowMoves";
@@ -57,33 +59,33 @@ function App() {
   const [orientation, setOrientation] = useState("white");
   const [engineMove, setEngineMove] = useState("");
   const [sideToMove, setSideToMove] = useState("w");
-  const [moves, setMoves] = useState([]);
+  const [moves, setMoves] = useState("");
   const [cp, setCp] = useState();
   const [depth, setDepth] = useState(5);
 
-  const onLegalMove = (game) => {
-    // let depth = 10;
-    // engine.postMessage("position fen " + fen);
-    // engine.postMessage("go depth " + depth);
-    // engine.onmessage = function (line) {
-    //   // console.log(line.data);
-    //   let last_line = line.data.match("info depth " + depth);
-    //   let best_move = line.data.match(/bestmove\s+(\S+)/);
-    //   if (last_line !== null) {
-    //     // console.log(last_line.input);
-    //     let cp_substr_start = last_line.input.indexOf("cp") + 3;
-    //     let cp_substr_end = last_line.input.indexOf("nodes") - 1;
-    //     let cp_value = last_line.input.substring(
-    //       cp_substr_start,
-    //       cp_substr_end
-    //     );
-    //     // console.log("cp value = ", cp_value / 100);
-    //     setCp(cp_value / 100);
-    //     // props.updateCp(cp_value / 100);
-    //   }
-    // };
-    // sideToMove === "w" ? changeSideToMove("b") : changeSideToMove("w");
-  };
+  // const onLegalMove = (game) => {
+  // let depth = 10;
+  // engine.postMessage("position fen " + fen);
+  // engine.postMessage("go depth " + depth);
+  // engine.onmessage = function (line) {
+  //   // console.log(line.data);
+  //   let last_line = line.data.match("info depth " + depth);
+  //   let best_move = line.data.match(/bestmove\s+(\S+)/);
+  //   if (last_line !== null) {
+  //     // console.log(last_line.input);
+  //     let cp_substr_start = last_line.input.indexOf("cp") + 3;
+  //     let cp_substr_end = last_line.input.indexOf("nodes") - 1;
+  //     let cp_value = last_line.input.substring(
+  //       cp_substr_start,
+  //       cp_substr_end
+  //     );
+  //     // console.log("cp value = ", cp_value / 100);
+  //     setCp(cp_value / 100);
+  //     // props.updateCp(cp_value / 100);
+  //   }
+  // };
+  // sideToMove === "w" ? changeSideToMove("b") : changeSideToMove("w");
+  // };
 
   const setPlayAs = (event, playas) => {
     setOrientation(playas);
@@ -122,15 +124,7 @@ function App() {
           cp_substr_start,
           cp_substr_end
         );
-        console.log("cp value = ", cp_value / 100);
 
-        // if (sideToMove === "w") setCp(-cp_value / 100);
-        // else {
-        //   setCp(cp_value / 100);
-        //   console.log("else loop");
-        // }
-
-        console.log(orientation);
         orientation === "white"
           ? setCp(-cp_value / 100)
           : setCp(cp_value / 100);
@@ -154,82 +148,79 @@ function App() {
     // console.log(game.pgn({ maxWidth: 10, newline: "\n" }));
     setMoves(game.pgn({ maxWidth: 10, newline: "\n" }));
   };
-  // const pgn = () => {
-  //   console.log(game.pgn({ maxWidth: 10, newline: "\n" }));
-  //   MySwal.fire({
-  //     title: <p>PGN</p>,
-  //     // didOpen: () => {
-  //     //   // `MySwal` is a subclass of `Swal` with all the same instance & static methods
-  //     //   // MySwal.showLoading();
-  //     //   MySwal
-  //     // },
-  //     html: <i>{game.pgn({ maxWidth: 5, newline: "<br />" })}</i>,
-  //     icon: "success",
-  //   });
-  // };
 
-  const sendToServer = () => {
-    axios
-      .get("http://localhost:4000/")
-      .then((res) => {
-        console.log(res);
-      })
-      .catch(function (error) {
-        // handle error
-        console.log(error);
-      })
-      .finally(function () {
-        // always executed
-      });
-  };
+  // const sendToServer = () => {
+  //   axios
+  //     .get("http://localhost:4000/")
+  //     .then((res) => {
+  //       console.log(res);
+  //     })
+  //     .catch(function (error) {
+  //       // handle error
+  //       console.log(error);
+  //     })
+  //     .finally(function () {
+  //       // always executed
+  //     });
+  // };
 
   const updateMoves = () => {
     setMoves(game.pgn({ maxWidth: 10, newline: "\n" }));
+    // setMoves(game.pgn().split(" "));
+    // console.log(moves);
   };
-  // const TestEngineMove = () => {
-  //   game.move("e5");
-  //   setFen(game.fen());
-  // };
+
   return (
     <>
-      {/* <button onClick={test_click}>test</button> */}
-      {/* <button onClick={TestEngineMove}>TestEngineMove</button> */}
-      {/* <Board onLegalMove={onLegalMove} orientation={orientation} /> */}
+      <Grid container spacing={"20%"}>
+        <Grid xs={4}>
+          <Stack
+            direction="row"
+            spacing={2}
+            justifyContent="space-evenly"
+            alignItems="center"
+          >
+            <ToggleButtonGroup
+              color="primary"
+              value={orientation}
+              exclusive
+              onChange={setPlayAs}
+            >
+              {/* <ToggleButton value="white">white</ToggleButton> */}
+              <ToggleButton value="black">Play as Black</ToggleButton>
+            </ToggleButtonGroup>
 
-      <Board
-        onLegalMove={onLegalMove}
-        orientation={orientation}
-        game={game}
-        position={fen}
-        changeSideToMove={changeSideToMove}
-        // cp={cp}
-        updateCp={updateCp}
-        depth={depth}
-        updateMoves={updateMoves}
-      />
-      <Status cp_value={cp} />
-      <EngineLevel onsetDepth={onsetDepth} />
-      <ShowMoves moves={moves} />
-      {/* <MoveTable moves={moves} /> */}
-      <ToggleButtonGroup
-        color="primary"
-        value={orientation}
-        exclusive
-        onChange={setPlayAs}
-      >
-        {/* <ToggleButton value="white">white</ToggleButton> */}
-        <ToggleButton value="black">Play as Black</ToggleButton>
-      </ToggleButtonGroup>
+            <EngineLevel onsetDepth={onsetDepth} />
+          </Stack>
+          <Status cp_value={cp} />
+          <ShowMoves moves={moves} />
+        </Grid>
+        <Grid xs={8}>
+          <Board
+            // onLegalMove={onLegalMove}
+            orientation={orientation}
+            game={game}
+            position={fen}
+            changeSideToMove={changeSideToMove}
+            // cp={cp}
+            updateCp={updateCp}
+            depth={depth}
+            updateMoves={updateMoves}
+          />
+        </Grid>
 
-      <Button variant="contained" onClick={sendToServer}>
+        {/* <MoveTable moves={moves} /> */}
+
+        {/* <Button variant="contained" onClick={sendToServer}>
         send To Server
-      </Button>
-      {/* <Button variant="contained" onClick={pgn}>
+      </Button> */}
+        {/* <Button variant="contained" onClick={pgn}>
         PGN
       </Button> */}
-      <Button variant="contained" onClick={showMoves}>
+        {/* <Button variant="contained" onClick={showMoves}>
         Moves
-      </Button>
+      </Button> */}
+      </Grid>
     </>
   );
 }
