@@ -34,7 +34,7 @@ function Status(props) {
   //   }, []);
 
   useEffect(() => {
-    // console.log(data);
+    console.log(data);
 
     // for (let i = 0; i < data.length; i++) {
     //   if (i > 1) data1.push(data[i]);
@@ -58,12 +58,12 @@ function Status(props) {
     // <ResponsiveContainer width={500} height={350} aspect={1}>
     <LineChart
       width={500}
-      height={300}
+      height={200}
       data={data}
       margin={{
         top: 40,
         right: 50,
-        // left: 20,
+        left: 0,
         bottom: 5,
       }}
     >

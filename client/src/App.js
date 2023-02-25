@@ -110,10 +110,20 @@ function App() {
           cp_substr_start,
           cp_substr_end
         );
-        console.log("cp value = ", cp_value / 100);
+        console.log("cp value = ", last_line);
 
-        if (sideToMove === "w") setCp(-cp_value / 100);
-        else setCp(cp_value / 100);
+        // if (sideToMove === "w") setCp(-cp_value / 100);
+        // else {
+        //   setCp(cp_value / 100);
+        //   console.log("else loop");
+        // }
+
+        console.log(orientation);
+        orientation === "white"
+          ? setCp(-cp_value / 100)
+          : setCp(cp_value / 100);
+        // setCp(cp_value / 100);
+        // sideToMove === "w" ? setCp(-cp_value / 100) : setCp(cp_value / 100);
       }
 
       if (best_move[1] !== null) game.move(best_move[1]);
@@ -122,7 +132,7 @@ function App() {
   };
 
   const updateCp = (cp_value) => {
-    console.log("here now cp=", cp_value);
+    // console.log("here now cp=", cp_value);
     setCp(cp_value);
   };
 
