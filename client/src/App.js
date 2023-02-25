@@ -138,6 +138,7 @@ function App() {
 
       if (best_move[1] !== null) game.move(best_move[1]);
       setFen(game.fen());
+      updateMoves();
     };
   };
 
@@ -181,6 +182,10 @@ function App() {
         // always executed
       });
   };
+
+  const updateMoves = () => {
+    setMoves(game.pgn({ maxWidth: 10, newline: "\n" }));
+  };
   // const TestEngineMove = () => {
   //   game.move("e5");
   //   setFen(game.fen());
@@ -200,6 +205,7 @@ function App() {
         // cp={cp}
         updateCp={updateCp}
         depth={depth}
+        updateMoves={updateMoves}
       />
       <Status cp_value={cp} />
       <EngineLevel onsetDepth={onsetDepth} />

@@ -54,9 +54,13 @@ function Board(props) {
         let sideToMove = game_history[game_history.length - 1].color;
         console.log(sideToMove);
 
+        // switch side to let the engine make move
         sideToMove === "w"
           ? props.changeSideToMove("b")
           : props.changeSideToMove("w");
+
+        // update move table
+        props.updateMoves();
       } catch (error) {
         console.log("illigal move");
       }
