@@ -34,7 +34,7 @@ function Status(props) {
   //   }, []);
 
   useEffect(() => {
-    console.log(data);
+    // console.log(data);
 
     // for (let i = 0; i < data.length; i++) {
     //   if (i > 1) data1.push(data[i]);

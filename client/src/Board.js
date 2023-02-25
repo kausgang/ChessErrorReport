@@ -46,7 +46,7 @@ function Board(props) {
   const onDrop = ({ sourceSquare, targetSquare }) => {
     let fen = props.game.fen();
 
-    let depth = 10;
+    let depth = 15;
     engine.postMessage("position fen " + fen);
     engine.postMessage("go depth " + depth);
 
@@ -91,19 +91,6 @@ function Board(props) {
       sideToMove === "w"
         ? props.changeSideToMove("b")
         : props.changeSideToMove("w");
-
-      // props.changeSideToMove("b");
-      // (props)
-
-      //   game.move({
-      //     from: sourceSquare,
-      //     to: targetSquare,
-      //     promotion: "q", // always promote to a queen for example simplicity
-      //   });
-
-      //   setFen(game.fen()); //fen holds the position reached after dropping this piece
-      //   setHistory(game.history({ verbose: true })); //history array holds all the moves played, the lan and san candidates of the history object shows the current move, the fen candidate of the history object shows the previous fen
-      //   setPgn(game.pgn());
     } catch (error) {
       console.log("illigal move");
     }

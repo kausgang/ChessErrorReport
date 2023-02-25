@@ -6,6 +6,7 @@ import React, { useState, useEffect } from "react";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import MoveTable from "./MoveTable";
+import EngineLevel from "./EngineLevel";
 
 // import axios from "axios";
 
@@ -52,6 +53,7 @@ function App() {
   const [sideToMove, setSideToMove] = useState("w");
   const [moves, setMoves] = useState([]);
   const [cp, setCp] = useState();
+  const [depth, setDepth] = useState(5);
 
   // console.log(sideToMove);
 
@@ -60,17 +62,27 @@ function App() {
   // };
 
   const onLegalMove = (game) => {
-    // setSideToMove("b");
-    // if (sideToMove === "b") {
-    // setSideToMove("w");
-    // }
-    // let history = game.history({ verbose: true });
-    // let sanMove;
-    // if (history.length !== 0) {
-    //   sanMove = history[history.length - 1].san;
-    //   console.log(sanMove);
-    // }
-    // setMoves([...moves, { id: Math.random(), white: "", black: "e5" }]);
+    // let depth = 10;
+    // engine.postMessage("position fen " + fen);
+    // engine.postMessage("go depth " + depth);
+    // engine.onmessage = function (line) {
+    //   // console.log(line.data);
+    //   let last_line = line.data.match("info depth " + depth);
+    //   let best_move = line.data.match(/bestmove\s+(\S+)/);
+    //   if (last_line !== null) {
+    //     // console.log(last_line.input);
+    //     let cp_substr_start = last_line.input.indexOf("cp") + 3;
+    //     let cp_substr_end = last_line.input.indexOf("nodes") - 1;
+    //     let cp_value = last_line.input.substring(
+    //       cp_substr_start,
+    //       cp_substr_end
+    //     );
+    //     // console.log("cp value = ", cp_value / 100);
+    //     setCp(cp_value / 100);
+    //     // props.updateCp(cp_value / 100);
+    //   }
+    // };
+    // sideToMove === "w" ? changeSideToMove("b") : changeSideToMove("w");
   };
 
   const setPlayAs = (event, playas) => {
@@ -83,12 +95,12 @@ function App() {
 
   const changeSideToMove = (side) => {
     // console.log(side);
-    // setSideToMove(side);
+    setSideToMove(side);
 
     let fen = game.fen();
-    // console.log(fen);
+    console.log(depth);
 
-    let depth = 10;
+    // let depth = 10;
     engine.postMessage("position fen " + fen);
     engine.postMessage("go depth " + depth);
 
@@ -110,7 +122,7 @@ function App() {
           cp_substr_start,
           cp_substr_end
         );
-        console.log("cp value = ", last_line);
+        console.log("cp value = ", cp_value / 100);
 
         // if (sideToMove === "w") setCp(-cp_value / 100);
         // else {
@@ -131,6 +143,9 @@ function App() {
     };
   };
 
+  const onsetDepth = (newDepth) => {
+    setDepth(newDepth);
+  };
   const updateCp = (cp_value) => {
     // console.log("here now cp=", cp_value);
     setCp(cp_value);
@@ -154,7 +169,10 @@ function App() {
         changeSideToMove={changeSideToMove}
         cp={cp}
         updateCp={updateCp}
+        depth={depth}
       />
+      <EngineLevel onsetDepth={onsetDepth} />
+
       {/* <MoveTable moves={moves} /> */}
       <ToggleButtonGroup
         color="primary"
