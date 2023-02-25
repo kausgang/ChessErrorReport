@@ -8,8 +8,12 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import MoveTable from "./MoveTable";
 import EngineLevel from "./EngineLevel";
 import Status from "./Status";
+import Button from "@mui/material/Button";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 import axios from "axios";
+import ShowMoves from "./ShowMoves";
 
 // const test_click = () => {
 //   // alert("test");
@@ -28,6 +32,7 @@ import axios from "axios";
 // };
 
 var engine = new Worker("stockfish.js");
+const MySwal = withReactContent(Swal);
 
 function App() {
   //ENGINE ANALYSIS LOGIC BELOW
@@ -55,12 +60,6 @@ function App() {
   const [moves, setMoves] = useState([]);
   const [cp, setCp] = useState();
   const [depth, setDepth] = useState(5);
-
-  // console.log(sideToMove);
-
-  // const onLegalMove = (fen, history, pgn) => {
-  //   console.log("fen=", fen, "history=", history, "pgn=", pgn);
-  // };
 
   const onLegalMove = (game) => {
     // let depth = 10;
@@ -150,6 +149,24 @@ function App() {
     setCp(cp_value);
   };
 
+  const showMoves = () => {
+    // console.log(game.pgn({ maxWidth: 10, newline: "\n" }));
+    setMoves(game.pgn({ maxWidth: 10, newline: "\n" }));
+  };
+  const pgn = () => {
+    console.log(game.pgn({ maxWidth: 10, newline: "\n" }));
+    MySwal.fire({
+      title: <p>PGN</p>,
+      // didOpen: () => {
+      //   // `MySwal` is a subclass of `Swal` with all the same instance & static methods
+      //   // MySwal.showLoading();
+      //   MySwal
+      // },
+      html: <i>{game.pgn({ maxWidth: 5, newline: "<br />" })}</i>,
+      icon: "success",
+    });
+  };
+
   const sendToServer = () => {
     axios
       .get("http://localhost:4000/")
@@ -186,7 +203,7 @@ function App() {
       />
       <Status cp_value={cp} />
       <EngineLevel onsetDepth={onsetDepth} />
-
+      <ShowMoves moves={moves} />
       {/* <MoveTable moves={moves} /> */}
       <ToggleButtonGroup
         color="primary"
@@ -194,11 +211,19 @@ function App() {
         exclusive
         onChange={setPlayAs}
       >
-        <ToggleButton value="white">white</ToggleButton>
+        {/* <ToggleButton value="white">white</ToggleButton> */}
         <ToggleButton value="black">Play as Black</ToggleButton>
       </ToggleButtonGroup>
 
-      <button onClick={sendToServer}>sendToServer</button>
+      <Button variant="contained" onClick={sendToServer}>
+        sendToServer
+      </Button>
+      <Button variant="contained" onClick={pgn}>
+        PGN
+      </Button>
+      <Button variant="contained" onClick={showMoves}>
+        Moves
+      </Button>
     </>
   );
 }
