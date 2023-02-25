@@ -180,6 +180,7 @@ function App() {
             justifyContent="space-evenly"
             alignItems="center"
           >
+            <EngineLevel onsetDepth={onsetDepth} />
             <ToggleButtonGroup
               color="primary"
               value={orientation}
@@ -189,8 +190,6 @@ function App() {
               {/* <ToggleButton value="white">white</ToggleButton> */}
               <ToggleButton value="black">Play as Black</ToggleButton>
             </ToggleButtonGroup>
-
-            <EngineLevel onsetDepth={onsetDepth} />
           </Stack>
           <Status cp_value={cp} />
           <ShowMoves moves={moves} />
