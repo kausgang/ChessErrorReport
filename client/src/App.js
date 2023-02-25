@@ -153,19 +153,19 @@ function App() {
     // console.log(game.pgn({ maxWidth: 10, newline: "\n" }));
     setMoves(game.pgn({ maxWidth: 10, newline: "\n" }));
   };
-  const pgn = () => {
-    console.log(game.pgn({ maxWidth: 10, newline: "\n" }));
-    MySwal.fire({
-      title: <p>PGN</p>,
-      // didOpen: () => {
-      //   // `MySwal` is a subclass of `Swal` with all the same instance & static methods
-      //   // MySwal.showLoading();
-      //   MySwal
-      // },
-      html: <i>{game.pgn({ maxWidth: 5, newline: "<br />" })}</i>,
-      icon: "success",
-    });
-  };
+  // const pgn = () => {
+  //   console.log(game.pgn({ maxWidth: 10, newline: "\n" }));
+  //   MySwal.fire({
+  //     title: <p>PGN</p>,
+  //     // didOpen: () => {
+  //     //   // `MySwal` is a subclass of `Swal` with all the same instance & static methods
+  //     //   // MySwal.showLoading();
+  //     //   MySwal
+  //     // },
+  //     html: <i>{game.pgn({ maxWidth: 5, newline: "<br />" })}</i>,
+  //     icon: "success",
+  //   });
+  // };
 
   const sendToServer = () => {
     axios
@@ -216,11 +216,11 @@ function App() {
       </ToggleButtonGroup>
 
       <Button variant="contained" onClick={sendToServer}>
-        sendToServer
+        send To Server
       </Button>
-      <Button variant="contained" onClick={pgn}>
+      {/* <Button variant="contained" onClick={pgn}>
         PGN
-      </Button>
+      </Button> */}
       <Button variant="contained" onClick={showMoves}>
         Moves
       </Button>
