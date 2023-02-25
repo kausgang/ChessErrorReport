@@ -85,8 +85,9 @@ function App() {
     setSideToMove(side);
 
     let fen = game.fen();
+    // console.log(fen);
 
-    let depth = 3;
+    let depth = 10;
     engine.postMessage("position fen " + fen);
     engine.postMessage("go depth " + depth);
 
@@ -94,11 +95,12 @@ function App() {
       // console.log(line.data);
 
       let last_line = line.data.match("info depth " + depth);
+
       let best_move = line.data.match(/bestmove\s+(\S+)/);
 
       // if (last_line) console.log(last_line);
       // if (best_move) console.log(best_move[1]);
-      game.move(best_move[1]);
+      if (best_move[1] !== null) game.move(best_move[1]);
       setFen(game.fen());
     };
   };
