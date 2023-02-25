@@ -51,6 +51,7 @@ function App() {
   const [engineMove, setEngineMove] = useState("");
   const [sideToMove, setSideToMove] = useState("w");
   const [moves, setMoves] = useState([]);
+  const [cp, setCp] = useState();
 
   // console.log(sideToMove);
 
@@ -74,7 +75,7 @@ function App() {
 
   const setPlayAs = (event, playas) => {
     setOrientation(playas);
-    //if black is played - start the game
+    //if "play as black" is clicked - start the game
     changeSideToMove("w");
     // disable the black button after it has been clicked once
     event.target.disabled = "true";
@@ -82,7 +83,7 @@ function App() {
 
   const changeSideToMove = (side) => {
     // console.log(side);
-    setSideToMove(side);
+    // setSideToMove(side);
 
     let fen = game.fen();
     // console.log(fen);
@@ -98,11 +99,31 @@ function App() {
 
       let best_move = line.data.match(/bestmove\s+(\S+)/);
 
-      // if (last_line) console.log(last_line);
-      // if (best_move) console.log(best_move[1]);
+      // if (last_line !== null) console.log(last_line.input);
+      // console.log(sideToMove);
+
+      if (last_line !== null) {
+        console.log(last_line.input);
+        let cp_substr_start = last_line.input.indexOf("cp") + 3;
+        let cp_substr_end = last_line.input.indexOf("nodes") - 1;
+        let cp_value = last_line.input.substring(
+          cp_substr_start,
+          cp_substr_end
+        );
+        console.log("cp value = ", cp_value / 100);
+
+        if (sideToMove === "w") setCp(-cp_value / 100);
+        else setCp(cp_value / 100);
+      }
+
       if (best_move[1] !== null) game.move(best_move[1]);
       setFen(game.fen());
     };
+  };
+
+  const updateCp = (cp_value) => {
+    console.log("here now cp=", cp_value);
+    setCp(cp_value);
   };
 
   // const TestEngineMove = () => {
@@ -121,6 +142,8 @@ function App() {
         game={game}
         position={fen}
         changeSideToMove={changeSideToMove}
+        cp={cp}
+        updateCp={updateCp}
       />
       {/* <MoveTable moves={moves} /> */}
       <ToggleButtonGroup
