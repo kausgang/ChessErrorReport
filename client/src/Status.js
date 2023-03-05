@@ -20,42 +20,22 @@ function Status(props) {
 
   let data1 = [];
 
-  //   useEffect(() => {
-  //     console.log(data);
-
-  //     // delete first two elements of data array
-  //     let data1 = [];
-  //     for (let i = 0; i < data.length; i++) {
-  //       if (i > 1) data1.push(data[i]);
-  //     }
-  //     console.log("data1=", data1);
-  //     setData(data1);
-
-  //   }, []);
-
   useEffect(() => {
-    // console.log(data);
-
-    // for (let i = 0; i < data.length; i++) {
-    //   if (i > 1) data1.push(data[i]);
-    // }
-
     data1 = [...data];
-    // console.log(data1);
-    // data1.shift();
-    setData([...data1, { cp: props.cp_value }]);
+
+    setData([
+      ...data1,
+      {
+        cp: props.cp_value,
+        move: props.game.history().pop(),
+        move_number: props.game.history().length,
+      },
+    ]);
+
+    // setData([...data1, { cp: "Mate 1" }]);
   }, [props.cp_value]);
 
   return (
-    // <BarChart width={400} height={80} data={data}>
-    //   <Bar dataKey="uv" fill="#8884d8" />
-    // </BarChart>
-
-    // <LineChart width={400} height={100} data={data}>
-    //   <Line type="monotone" dataKey="pv" stroke="#8884d8" strokeWidth={2} />
-    // </LineChart>
-
-    // <ResponsiveContainer width={500} height={350} aspect={1}>
     <LineChart
       width={500}
       height={200}
@@ -68,16 +48,14 @@ function Status(props) {
       }}
     >
       <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="name" />
+      <XAxis dataKey="move_number" />
       <YAxis axisLine={false} />
       <Tooltip />
       <Legend />
       <ReferenceLine y={0.5} stroke="red" label="Score=0.5" />
-      {/* <ReferenceLine y={9800} label="Max" stroke="red" /> */}
       <Line type="monotone" dataKey="cp" stroke="#8884d8" />
-      {/* <Line type="monotone" dataKey="uv" stroke="#82ca9d" /> */}
+      <Line type="monotone" dataKey="move" stroke="#82ca9d" />
     </LineChart>
-    // </ResponsiveContainer>
   );
 }
 

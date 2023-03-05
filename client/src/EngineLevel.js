@@ -18,6 +18,7 @@ function EngineLevel(props) {
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={props.depth}
+          defaultValue="15"
           // label="Age"
           autoWidth
           onChange={handleChange}
@@ -25,6 +26,8 @@ function EngineLevel(props) {
           <MenuItem value={5}>5</MenuItem>
           <MenuItem value={10}>10</MenuItem>
           <MenuItem value={15}>15</MenuItem>
+          <MenuItem value={20}>20</MenuItem>
+          <MenuItem value={25}>25</MenuItem>
         </Select>
       </FormControl>
       {/* </Box> */}

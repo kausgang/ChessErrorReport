@@ -5,8 +5,8 @@ function ShowMoves(props) {
   return (
     <div style={{ whiteSpace: "pre-wrap" }}>
       <Typography variant="h6" gutterBottom>
-        {/* {props.moves.replace(" ", "    ")} */}
-        {props.moves.replaceAll(" ", "        ")}
+        {/* {props.moves.replaceAll(" ", "  --  ")} */}
+        {props.moves.replaceAll(" ", "  ----  ").replaceAll(".  ----", ".  ")}
       </Typography>
     </div>
   );

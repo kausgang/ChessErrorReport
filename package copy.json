@@ -6,7 +6,7 @@
   "scripts": {
      "client": "cd client && npm i && npm start",
     "server": "cd server && python a.py",
-    "start": "concurrently \"npm run client\" \"npm run server\" "
+    "start": "concurrently \"npm run server\" "
   },
   "keywords": [],
   "author": "",
