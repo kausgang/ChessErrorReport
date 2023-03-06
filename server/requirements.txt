@@ -1,4 +1,4 @@
 flask
 flask-smorest
 python-dotenv
-stockfish
+stockfish == 3.28.0
