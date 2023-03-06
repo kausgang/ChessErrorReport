@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "client": "cd client && npm i && npm start",
-    "server": "cd server && pip install -r requirements.txt && python a.py",
-    "start": "concurrently \"npm run server\" "   
+    "start": "concurrently \"npm run client\" "
   },
   "keywords": [],
   "author": "",

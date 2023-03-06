@@ -12,7 +12,7 @@ import Button from "@mui/material/Button";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import Grid from "@mui/material/Unstable_Grid2";
-import { saveGame } from "./DB/saveGame";
+import axios from "axios";
 
 import ShowMoves from "./ShowMoves";
 
@@ -30,29 +30,6 @@ function App() {
   const [moves, setMoves] = useState("");
   const [cp, setCp] = useState();
   const [depth, setDepth] = useState(15);
-
-  // let depth = 10;
-  // engine.postMessage("position fen " + fen);
-  // engine.postMessage("go depth " + depth);
-  // engine.onmessage = function (line) {
-  //   // console.log(line.data);
-  //   let last_line = line.data.match("info depth " + depth);
-  //   let best_move = line.data.match(/bestmove\s+(\S+)/);
-  //   if (last_line !== null) {
-  //     // console.log(last_line.input);
-  //     let cp_substr_start = last_line.input.indexOf("cp") + 3;
-  //     let cp_substr_end = last_line.input.indexOf("nodes") - 1;
-  //     let cp_value = last_line.input.substring(
-  //       cp_substr_start,
-  //       cp_substr_end
-  //     );
-  //     // console.log("cp value = ", cp_value / 100);
-  //     setCp(cp_value / 100);
-  //     // props.updateCp(cp_value / 100);
-  //   }
-  // };
-  // sideToMove === "w" ? changeSideToMove("b") : changeSideToMove("w");
-  // };
 
   const setPlayAs = (event, playas) => {
     event.target.disabled = "true";
@@ -126,16 +103,17 @@ function App() {
     setGameStarted(isGamgstarted);
   };
 
-  const onSaveGame = () => {
-    if (orientation === "white") {
-      game.header("White", "Human");
-      game.header("Black", "Computer");
-    } else {
-      game.header("White", "Computer");
-      game.header("Black", "Human");
-    }
-
-    saveGame(game.pgn());
+  const onAnalyze = () => {
+    axios
+      .post("http://localhost:5000/analyze", {
+        pgn: game.pgn(),
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   return (
@@ -170,8 +148,8 @@ function App() {
             {/* <ToggleButton value="white">white</ToggleButton> */}
             <ToggleButton value="black">Play as Black</ToggleButton>
           </ToggleButtonGroup>
-          <Button variant="contained" onClick={onSaveGame}>
-            copy to clipboard
+          <Button variant="contained" onClick={onAnalyze}>
+            Analyze
           </Button>
         </Grid>
 

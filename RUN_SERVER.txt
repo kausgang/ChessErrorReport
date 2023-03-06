@@ -1,0 +1,11 @@
+#RUN FROM CMD AND NOT POWERSHELL
+
+cd server
+python -m venv .venv
+cd .venv/Scripts
+activate
+
+#AFTER THE VIRTUAL ENVIRONMENT HAS BEEN ACTIVATED, RUN BELOW
+cd ../
+pip install -r requirements.txt
+flask run
