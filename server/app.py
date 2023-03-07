@@ -9,7 +9,7 @@ import chess.pgn
 # declare variables
 stockfish = Stockfish(
     path="./STOCKFISH/stockfish-windows-2022-x86-64-avx2.exe")
-engine_analysis_time = 1000
+engine_analysis_time = 5000
 board = chess.Board()
 
 app = Flask(__name__)
@@ -71,7 +71,16 @@ def analyze_game(game):
         stockfish.set_fen_position(fen)
         bestmove = stockfish.get_best_move_time(engine_analysis_time)
         game["bestmove"].append(bestmove)
-        score = stockfish.get_evaluation()["value"]
-        game["score"].append(score/100)
+        # score = stockfish.get_evaluation()["value"]
+        # game["score"].append(score/100)
+        score = stockfish.get_evaluation()
+        game["score"].append(score)
 
     print(game)
+    # create cp_lost list
+
+    # print(game["score"])
+    # # subtract next element from previous element to find cp loss
+    # print([y - x for x, y in zip(game["score"], game["score"][1:])])
+
+    # print(game)
