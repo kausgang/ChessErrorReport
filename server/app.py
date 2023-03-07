@@ -41,7 +41,6 @@ def construct_game():
 
     # get details about the game from pgn file
     for move in gameFromPGN.mainline_moves():
-        print(move)
 
         # make the move
         board.push(move)

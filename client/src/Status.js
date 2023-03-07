@@ -23,12 +23,23 @@ function Status(props) {
   useEffect(() => {
     data1 = [...data];
 
+    let move_number = props.game.history().length;
+    let remainder = move_number % 2;
+    let quotient = Math.floor(move_number / 2);
+    let updated_move_number;
+    if (remainder !== 0) {
+      updated_move_number = quotient + remainder;
+    } else {
+      updated_move_number = ".." + (quotient + remainder);
+    }
+
     setData([
       ...data1,
       {
         cp: props.cp_value,
         move: props.game.history().pop(),
-        move_number: props.game.history().length,
+        // move_number: props.game.history().length,
+        move_number: updated_move_number,
       },
     ]);
 
