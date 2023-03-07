@@ -15,18 +15,40 @@ stockfish = Stockfish(
 
 @app.post("/analyze")
 def analyze_game():
-    pgn_json = request.get_json()
-    pgn = pgn_json['pgn']
 
-    # print(pgn)
-    game = chess.pgn.read_game(io.StringIO(pgn))
-    # print(game)
-    pgn_board = game.board()
+    game = {
+        "pgn": "",
+        "moves_san": [],
+        "moves_uci": [],
+        "fen": []
+    }
+
+    starting_position = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
     board = chess.Board()
 
-    for move in game.mainline_moves():
-        print(move)
+    # read the pgn sent by client
+    pgn_json = request.get_json()
+    pgn = pgn_json['pgn']
+    history = pgn_json['history']
 
-    # print(board.legal_moves )
+    # input pgn sent by client into the chess object
+    gameFromPGN = chess.pgn.read_game(io.StringIO(pgn))
+
+    # update the move and pgn inormation of the game dictionary
+    game.update({"pgn": pgn})
+    game.update({"moves_san": history})
+
+    # get details about the game from pgn file
+    for move in gameFromPGN.mainline_moves():
+        # print(move)
+
+        # make the move
+        board.push(move)
+        # update game objects's fen and moves_uci list
+        game["fen"].append(board.board_fen())
+        game["moves_uci"].append(move.uci())
+
+    print(game)
+
     return "got pgn", 200

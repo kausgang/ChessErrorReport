@@ -17,7 +17,7 @@ import axios from "axios";
 import ShowMoves from "./ShowMoves";
 
 var engine = new Worker("stockfish.js");
-const MySwal = withReactContent(Swal);
+// const MySwal = withReactContent(Swal);
 
 function App() {
   const [game, setGame] = useState(new Chess());
@@ -107,6 +107,7 @@ function App() {
     axios
       .post("http://localhost:5000/analyze", {
         pgn: game.pgn(),
+        history: game.history(),
       })
       .then(function (response) {
         console.log(response);
