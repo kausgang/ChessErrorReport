@@ -63,7 +63,7 @@ function Status(props) {
       <YAxis axisLine={false} />
       <Tooltip />
       <Legend />
-      <ReferenceLine y={0.5} stroke="red" label="Score=0.5" />
+      <ReferenceLine y={0.5} stroke="red" label="Score=0" />
       <Line type="monotone" dataKey="cp" stroke="#8884d8" />
       <Line type="monotone" dataKey="move" stroke="#82ca9d" />
     </LineChart>

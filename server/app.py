@@ -27,8 +27,7 @@ def construct_game():
         "fen": ["rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"],
         "score": [],
         "bestmove": [],
-        "bestmove_uci": [],
-        "bestmove_score": [],
+
     }
 
     # read the pgn sent by client
@@ -61,7 +60,7 @@ def construct_game():
 
 def analyze_game(game):
 
-    starting_position = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+    # starting_position = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
     # stockfish.set_fen_position(
     #     "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2")
@@ -71,6 +70,8 @@ def analyze_game(game):
         # board.legal_moves
         stockfish.set_fen_position(fen)
         bestmove = stockfish.get_best_move_time(engine_analysis_time)
-        game["bestmove_uci"].append(bestmove)
+        game["bestmove"].append(bestmove)
+        score = stockfish.get_evaluation()["value"]
+        game["score"].append(score/100)
 
     print(game)
