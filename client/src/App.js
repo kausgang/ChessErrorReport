@@ -13,6 +13,9 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import Grid from "@mui/material/Unstable_Grid2";
 import axios from "axios";
+import CircularProgress from "@mui/material/CircularProgress";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
 
 import ShowMoves from "./ShowMoves";
 
@@ -30,6 +33,10 @@ function App() {
   const [moves, setMoves] = useState("");
   const [cp, setCp] = useState();
   const [depth, setDepth] = useState(15);
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const setPlayAs = (event, playas) => {
     event.target.disabled = "true";
@@ -104,21 +111,48 @@ function App() {
   };
 
   const onAnalyze = () => {
-    axios
-      .post("http://localhost:5000/analyze", {
-        pgn: game.pgn(),
-        history: game.history(),
-      })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    // game.pgn()===""?return 0:alert("Play a game");
+    if (game.pgn() === "" || game.pgn() === null) alert("Play a game");
+    else {
+      // open modal
+      handleOpen();
+      axios
+        .post("http://localhost:5000/analyze", {
+          pgn: game.pgn(),
+          history: game.history(),
+        })
+        .then(function (response) {
+          handleClose();
+          console.log(response);
+          alert("Analysis successful");
+        })
+        .catch(function (error) {
+          console.log(error);
+          alert("server down");
+          handleClose();
+        });
+    }
+  };
+
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
   };
 
   return (
     <>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <CircularProgress />
+        </Box>
+      </Modal>
       <Grid container spacing={"20%"}>
         <Grid xs={4}>
           <EngineLevel onsetDepth={onsetDepth} />
