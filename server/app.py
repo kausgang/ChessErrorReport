@@ -14,7 +14,7 @@ stockfish = Stockfish(
 
 
 @app.post("/analyze")
-def analyze_game():
+def construct_game():
 
     game = {
         "pgn": "",
@@ -41,7 +41,7 @@ def analyze_game():
 
     # get details about the game from pgn file
     for move in gameFromPGN.mainline_moves():
-        # print(move)
+        print(move)
 
         # make the move
         board.push(move)
