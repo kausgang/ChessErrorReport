@@ -38,6 +38,7 @@ function App() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [progress, setProgress] = React.useState(0);
 
   const setPlayAs = (event, playas) => {
     event.target.disabled = "true";
@@ -117,6 +118,7 @@ function App() {
     else {
       // open modal
       handleOpen();
+
       axios
         .post("http://localhost:5000/analyze", {
           pgn: game.pgn(),
@@ -133,6 +135,16 @@ function App() {
           handleClose();
         });
     }
+
+    const timer = setInterval(() => {
+      setProgress((prevProgress) =>
+        prevProgress >= 100 ? 0 : prevProgress + 10
+      );
+    }, 800);
+
+    return () => {
+      clearInterval(timer);
+    };
   };
 
   const style = {
@@ -151,7 +163,8 @@ function App() {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <CircularProgress />
+          {/* <CircularProgress /> */}
+          <CircularProgress variant="determinate" value={progress} />
         </Box>
       </Modal>
       <Grid container spacing={"20%"}>

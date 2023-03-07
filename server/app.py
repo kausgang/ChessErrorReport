@@ -5,12 +5,15 @@ from stockfish import Stockfish
 import chess
 import chess.pgn
 
+# declare variables
+stockfish = Stockfish(
+    path="./STOCKFISH/stockfish-windows-2022-x86-64-avx2.exe")
+engine_analysis_time = 5000
+
+
 app = Flask(__name__)
 
 CORS(app)
-
-stockfish = Stockfish(
-    path="./STOCKFISH/stockfish-windows-2022-x86-64-avx2.exe")
 
 
 @app.post("/analyze")
@@ -20,10 +23,11 @@ def construct_game():
         "pgn": "",
         "moves_san": [],
         "moves_uci": [],
-        "fen": []
+        "fen": [],
+        "score": [],
+        "bestmove": [],
+        "bestmove_score": [],
     }
-
-    starting_position = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
     board = chess.Board()
 
@@ -45,7 +49,7 @@ def construct_game():
         # make the move
         board.push(move)
         # update game objects's fen and moves_uci list
-        # game["fen"].append(board.board_fen())
+
         game["fen"].append(board.fen())
         game["moves_uci"].append(move.uci())
 
@@ -55,4 +59,15 @@ def construct_game():
 
 
 def analyze_game(game):
-    print(game)
+
+    starting_position = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+
+    # stockfish.set_fen_position(
+    #     "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2")
+
+    for fen in game["fen"]:
+        stockfish.set_fen_position(fen)
+        bestmove = stockfish.get_best_move_time(engine_analysis_time)
+        # print(bestmove)
+
+    # print(stockfish.get_best_move())
