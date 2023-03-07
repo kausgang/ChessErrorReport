@@ -45,9 +45,14 @@ def construct_game():
         # make the move
         board.push(move)
         # update game objects's fen and moves_uci list
-        game["fen"].append(board.board_fen())
+        # game["fen"].append(board.board_fen())
+        game["fen"].append(board.fen())
         game["moves_uci"].append(move.uci())
 
-    print(game)
+    analyze_game(game)
 
     return "got pgn", 200
+
+
+def analyze_game(game):
+    print(game)
