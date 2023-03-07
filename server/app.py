@@ -5,11 +5,12 @@ from stockfish import Stockfish
 import chess
 import chess.pgn
 
+
 # declare variables
 stockfish = Stockfish(
     path="./STOCKFISH/stockfish-windows-2022-x86-64-avx2.exe")
-engine_analysis_time = 5000
-
+engine_analysis_time = 1000
+board = chess.Board()
 
 app = Flask(__name__)
 
@@ -23,13 +24,12 @@ def construct_game():
         "pgn": "",
         "moves_san": [],
         "moves_uci": [],
-        "fen": [],
+        "fen": ["rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"],
         "score": [],
         "bestmove": [],
+        "bestmove_uci": [],
         "bestmove_score": [],
     }
-
-    board = chess.Board()
 
     # read the pgn sent by client
     pgn_json = request.get_json()
@@ -53,6 +53,7 @@ def construct_game():
         game["fen"].append(board.fen())
         game["moves_uci"].append(move.uci())
 
+    # print(game)
     analyze_game(game)
 
     return "got pgn", 200
@@ -65,9 +66,11 @@ def analyze_game(game):
     # stockfish.set_fen_position(
     #     "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2")
 
+    # board.reset()
     for fen in game["fen"]:
+        # board.legal_moves
         stockfish.set_fen_position(fen)
         bestmove = stockfish.get_best_move_time(engine_analysis_time)
-        # print(bestmove)
+        game["bestmove_uci"].append(bestmove)
 
-    # print(stockfish.get_best_move())
+    print(game)

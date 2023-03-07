@@ -9,13 +9,15 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import EngineLevel from "./EngineLevel";
 import Status from "./Status";
 import Button from "@mui/material/Button";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
+// import Swal from "sweetalert2";
+// import withReactContent from "sweetalert2-react-content";
 import Grid from "@mui/material/Unstable_Grid2";
 import axios from "axios";
-import CircularProgress from "@mui/material/CircularProgress";
+// import CircularProgress from "@mui/material/CircularProgress";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import LinearProgress from "@mui/material/LinearProgress";
 
 import ShowMoves from "./ShowMoves";
 
@@ -137,10 +139,14 @@ function App() {
     }
 
     const timer = setInterval(() => {
-      setProgress((prevProgress) =>
-        prevProgress >= 100 ? 0 : prevProgress + 10
-      );
-    }, 800);
+      setProgress((oldProgress) => {
+        if (oldProgress === 100) {
+          return 0;
+        }
+        const diff = Math.random() * 10;
+        return Math.min(oldProgress + diff, 100);
+      });
+    }, 500);
 
     return () => {
       clearInterval(timer);
@@ -152,6 +158,12 @@ function App() {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
+
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
   };
 
   return (
@@ -163,10 +175,17 @@ function App() {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          {/* <CircularProgress /> */}
-          <CircularProgress variant="determinate" value={progress} />
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Analyzising Game
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            5 seconds per move
+          </Typography>
+
+          <LinearProgress variant="determinate" value={progress} />
         </Box>
       </Modal>
+
       <Grid container spacing={"20%"}>
         <Grid xs={4}>
           <EngineLevel onsetDepth={onsetDepth} />

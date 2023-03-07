@@ -61,6 +61,7 @@ function Board(props) {
         let final_cp = (cp_value / 100) * compare;
         props.updateCp(final_cp);
 
+        // continue the game by changing side to move
         sideToMove === "w"
           ? props.changeSideToMove("b")
           : props.changeSideToMove("w");
