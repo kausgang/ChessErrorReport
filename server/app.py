@@ -4,6 +4,7 @@ import io
 from stockfish import Stockfish
 import chess
 import chess.pgn
+from db import db
 
 
 # declare variables
@@ -19,6 +20,10 @@ app = Flask(__name__)
 
 CORS(app)
 
+# configure the SQLite database, relative to the app instance folder
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
+# initialize the app with the extension
+db.init_app(app)
 
 @app.post("/analyze")
 def construct_game():
@@ -98,11 +103,9 @@ def analyze_game(game):
     # if it is a large number or 0 it is a blunder or mate sequence
     cp_lost=[y - x for x, y in zip(cp[0:], cp[1:])]
 
-    print(cp)
-    print(cp_lost)
+    
 
     # construct analysis dictionary
-    
     analysis["uuid"]=game["uuid"]
     analysis["pgn"]=game["pgn"]
     analysis["cp_lost"]=cp_lost
@@ -115,7 +118,7 @@ def analyze_game(game):
         if abs(value) >= blunder_threshold or value == 0:
             analysis["move_number_on_cp_lost"].append(cp_lost.index(value))
     
-    print(game)
+    
     
     for move_number in analysis["move_number_on_cp_lost"]:
         analysis["move_on_cp_lost"].append(game["moves_san"][move_number])

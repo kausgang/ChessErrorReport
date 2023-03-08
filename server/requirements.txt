@@ -4,3 +4,5 @@ flask-cors
 python-dotenv
 stockfish == 3.28.0
 chess
+sqlalchemy
+flask-sqlalchemy
