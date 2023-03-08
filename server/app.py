@@ -9,7 +9,7 @@ import chess.pgn
 # declare variables
 stockfish = Stockfish(
     path="./STOCKFISH/stockfish-windows-2022-x86-64-avx2.exe")
-engine_analysis_time = 5000
+engine_analysis_time = 1000
 board = chess.Board()
 
 app = Flask(__name__)
@@ -21,6 +21,7 @@ CORS(app)
 def construct_game():
 
     game = {
+        "uuid":"",
         "pgn": "",
         "moves_san": [],
         "moves_uci": [],
@@ -31,14 +32,16 @@ def construct_game():
     }
 
     # read the pgn sent by client
-    pgn_json = request.get_json()
-    pgn = pgn_json['pgn']
-    history = pgn_json['history']
+    incoming_data = request.get_json()
+    uuid=incoming_data['uuid']
+    pgn = incoming_data['pgn']
+    history = incoming_data['history']
 
     # input pgn sent by client into the chess object
     gameFromPGN = chess.pgn.read_game(io.StringIO(pgn))
 
     # update the move and pgn inormation of the game dictionary
+    game.update({"uuid":uuid})
     game.update({"pgn": pgn})
     game.update({"moves_san": history})
 
@@ -76,11 +79,25 @@ def analyze_game(game):
         score = stockfish.get_evaluation()
         game["score"].append(score)
 
-    print(game)
-    # create cp_lost list
 
-    # print(game["score"])
+    # create cp list
+    cp=[]
+    for score in game["score"]:
+        if score["type"]=="cp":
+           cp.append(score["value"])
+        else:
+            cp.append(10000000)
+    
+    # create cp_loss list
     # # subtract next element from previous element to find cp loss
-    # print([y - x for x, y in zip(game["score"], game["score"][1:])])
+    # if it is a large number or 0 it is a blunder or mate sequence
+    cp_loss=[y - x for x, y in zip(cp[0:], cp[1:])]
 
-    # print(game)
+    print(cp)
+    print(cp_loss)
+
+    # construct analysis dictionary
+    analysis={}
+    analysis["uuid"]=game["uuid"]
+    print(analysis)
+

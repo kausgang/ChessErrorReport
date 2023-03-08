@@ -18,7 +18,7 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import LinearProgress from "@mui/material/LinearProgress";
-
+import { v4 as uuidv4 } from "uuid";
 import ShowMoves from "./ShowMoves";
 
 var engine = new Worker("stockfish.js");
@@ -131,8 +131,11 @@ function App() {
       // open modal
       handleOpen();
 
+      // create uuid for the game
+      let uuid = uuidv4();
       axios
         .post("http://localhost:5000/analyze", {
+          uuid: uuid,
           pgn: game.pgn(),
           history: game.history(),
         })

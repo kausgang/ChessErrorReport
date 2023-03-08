@@ -1,6 +1,6 @@
 flask
 flask-cors
-flask-smorest
+# flask-smorest
 python-dotenv
 stockfish == 3.28.0
 chess
