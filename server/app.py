@@ -10,6 +10,7 @@ import chess.pgn
 stockfish = Stockfish(
     path="./STOCKFISH/stockfish-windows-2022-x86-64-avx2.exe")
 engine_analysis_time = 1000
+blunder_threshold=200
 board = chess.Board()
 
 app = Flask(__name__)
@@ -91,13 +92,27 @@ def analyze_game(game):
     # create cp_loss list
     # # subtract next element from previous element to find cp loss
     # if it is a large number or 0 it is a blunder or mate sequence
-    cp_loss=[y - x for x, y in zip(cp[0:], cp[1:])]
+    cp_lost=[y - x for x, y in zip(cp[0:], cp[1:])]
 
     print(cp)
-    print(cp_loss)
+    print(cp_lost)
 
     # construct analysis dictionary
     analysis={}
     analysis["uuid"]=game["uuid"]
+    analysis["pgn"]=game["pgn"]
+    analysis["cp_lost"]=cp_lost
+    analysis["move_number_on_cp_lost"]=[]
+    analysis["move_on_cp_lost"]=[]
+
+    for value in cp_lost:
+        if abs(value) >= blunder_threshold or value == 0:
+            analysis["move_number_on_cp_lost"].append(cp_lost.index(value))
+    
+    print(game["moves_san"])
+    
+    for move_number in analysis["move_number_on_cp_lost"]:
+        analysis["move_on_cp_lost"].append(game["moves_san"][move_number])
+
     print(analysis)
 
