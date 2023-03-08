@@ -21,7 +21,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import { v4 as uuidv4 } from "uuid";
 import ShowMoves from "./ShowMoves";
 
-var engine = new Worker("stockfish.js");
+// var engine = new Worker("stockfish.js");
 // const MySwal = withReactContent(Swal);
 
 function App() {
@@ -55,6 +55,8 @@ function App() {
     // setSideToMove(side);
 
     let fen = game.fen();
+
+    var engine = new Worker("stockfish.js");
 
     engine.postMessage("position fen " + fen);
     engine.postMessage("go depth " + depth);
@@ -94,6 +96,9 @@ function App() {
         if (best_move[1] !== null) game.move(best_move[1]);
         setFen(game.fen());
         updateMoves();
+
+        // terminate the worker as the best move has been found
+        engine.terminate();
       } catch (err) {}
 
       // check for gameover

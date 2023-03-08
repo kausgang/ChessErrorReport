@@ -7,6 +7,7 @@ function Board(props) {
   const [fen, setFen] = useState("start");
   const [history, setHistory] = useState([]);
   const [pgn, setPgn] = useState("");
+  let depth = 10;
 
   useEffect(() => {
     setFen(props.game.fen());
@@ -28,7 +29,7 @@ function Board(props) {
       compare = 1;
     } else compare = -1;
 
-    let depth = 10;
+    // let depth = 10;
     engine.postMessage("position fen " + fen);
     // engine.postMessage("go movetime 1000");
     engine.postMessage("go depth " + depth);
