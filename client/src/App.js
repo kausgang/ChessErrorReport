@@ -65,19 +65,29 @@ function App() {
       let last_line = line.data.match("info depth " + depth);
 
       let best_move = line.data.match(/bestmove\s+(\S+)/);
-
+      let mate = 0,
+        mate_in = 0;
+      console.log(last_line);
       if (last_line !== null) {
         let cp_substr_start = last_line.input.indexOf("cp") + 3;
         let cp_substr_end = last_line.input.indexOf("nodes") - 1;
+        if (cp_substr_start === 2) {
+          //cp was not returned, mate was found
+          mate = last_line.input.indexOf("score") + 6;
+          mate_in = last_line.input.substring(mate, cp_substr_end);
+          console.log(mate_in);
+        }
+
         cp_value = last_line.input.substring(cp_substr_start, cp_substr_end);
 
         // if (cp_value.isNaN()) {
-        orientation === "white"
-          ? setCp(-cp_value / 100)
-          : setCp(cp_value / 100);
-        // } else {
-        //   setCp(cp_value);
-        // }
+
+        if (cp_substr_start !== 2)
+          //cp was not returned, mate was found
+          orientation === "white"
+            ? setCp(-cp_value / 100)
+            : setCp(cp_value / 100);
+        else setCp(mate_in);
       }
 
       try {
@@ -137,20 +147,6 @@ function App() {
           handleClose();
         });
     }
-
-    const timer = setInterval(() => {
-      setProgress((oldProgress) => {
-        if (oldProgress === 100) {
-          return 0;
-        }
-        const diff = Math.random() * 10;
-        return Math.min(oldProgress + diff, 100);
-      });
-    }, 500);
-
-    return () => {
-      clearInterval(timer);
-    };
   };
 
   const style = {
@@ -182,7 +178,7 @@ function App() {
             5 seconds per move
           </Typography>
 
-          <LinearProgress variant="determinate" value={progress} />
+          <LinearProgress />
         </Box>
       </Modal>
 

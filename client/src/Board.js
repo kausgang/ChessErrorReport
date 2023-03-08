@@ -7,27 +7,16 @@ function Board(props) {
   const [fen, setFen] = useState("start");
   const [history, setHistory] = useState([]);
   const [pgn, setPgn] = useState("");
-  // const [cp, setCp] = useState();
-
-  var engine = new Worker("stockfish.js");
 
   useEffect(() => {
     setFen(props.game.fen());
-
-    // // check for gameover
-    // if (game.isCheckmate()) {
-    //   alert("Checkmate!");
-    // }
-    // if (game.isDraw()) {
-    //   alert("Draw!");
-    // }
-    // if (game.isStalemate()) {
-    //   alert("Stalemate!");
-    // }
   });
 
   const calculate_cp = (fen) => {
     let compare = 0;
+    // let engine = props.engine;
+
+    var engine = new Worker("stockfish.js");
 
     // check which side to move
     let game_history = props.game.history({ verbose: true });
@@ -49,17 +38,39 @@ function Board(props) {
 
       let last_line = line.data.match("info depth " + depth);
 
+      let mate = 0,
+        mate_in = 0;
+
       if (last_line !== null) {
         // console.log(last_line.input);
         let cp_substr_start = last_line.input.indexOf("cp") + 3;
         let cp_substr_end = last_line.input.indexOf("nodes") - 1;
+
+        if (cp_substr_start === 2) {
+          //cp was not returned, mate was found
+          mate = last_line.input.indexOf("score") + 6;
+          mate_in = last_line.input.substring(mate, cp_substr_end);
+          console.log(mate_in);
+        }
+
         let cp_value = last_line.input.substring(
           cp_substr_start,
           cp_substr_end
         );
 
-        let final_cp = (cp_value / 100) * compare;
+        // let final_cp = (cp_value / 100) * compare;
+        // props.updateCp(final_cp);
+
+        let final_cp = 0;
+        if (cp_substr_start !== 2)
+          //cp was not returned, mate was found
+          final_cp = (cp_value / 100) * compare;
+        else final_cp = mate_in;
         props.updateCp(final_cp);
+
+        // console.log(final_cp);
+
+        engine.terminate();
 
         // continue the game by changing side to move
         sideToMove === "w"
