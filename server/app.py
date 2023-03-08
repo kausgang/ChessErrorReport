@@ -10,7 +10,9 @@ import chess.pgn
 stockfish = Stockfish(
     path="./STOCKFISH/stockfish-windows-2022-x86-64-avx2.exe")
 engine_analysis_time = 1000
-blunder_threshold=200
+blunder_threshold=200 #in centipawn value
+# hold analysis here
+analysis={}
 board = chess.Board()
 
 app = Flask(__name__)
@@ -31,6 +33,8 @@ def construct_game():
         "bestmove": [],
 
     }
+
+
 
     # read the pgn sent by client
     incoming_data = request.get_json()
@@ -59,7 +63,7 @@ def construct_game():
     # print(game)
     analyze_game(game)
 
-    return "got pgn", 200
+    return analysis, 200
 
 
 def analyze_game(game):
@@ -98,21 +102,26 @@ def analyze_game(game):
     print(cp_lost)
 
     # construct analysis dictionary
-    analysis={}
+    
     analysis["uuid"]=game["uuid"]
     analysis["pgn"]=game["pgn"]
     analysis["cp_lost"]=cp_lost
     analysis["move_number_on_cp_lost"]=[]
     analysis["move_on_cp_lost"]=[]
+    analysis["fen_on_cp_lost"]=[]
+    analysis["bestmove_on_cp_lost"]=[]
 
     for value in cp_lost:
         if abs(value) >= blunder_threshold or value == 0:
             analysis["move_number_on_cp_lost"].append(cp_lost.index(value))
     
-    print(game["moves_san"])
+    print(game)
     
     for move_number in analysis["move_number_on_cp_lost"]:
         analysis["move_on_cp_lost"].append(game["moves_san"][move_number])
+        analysis["fen_on_cp_lost"].append(game["fen"][move_number])
+        analysis["bestmove_on_cp_lost"].append(game["bestmove"][move_number])
 
-    print(analysis)
+    # print(analysis)
+    
 
