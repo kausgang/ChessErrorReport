@@ -4,7 +4,9 @@ import io
 from stockfish import Stockfish
 import chess
 import chess.pgn
-from db import db
+from advice import advice
+from datetime import datetime
+
 
 
 # declare variables
@@ -13,17 +15,14 @@ stockfish = Stockfish(
 engine_analysis_time = 1000
 blunder_threshold=200 #in centipawn value
 # hold analysis here
-analysis={}
+analysis={"advice":[]}
 board = chess.Board()
 
 app = Flask(__name__)
 
 CORS(app)
 
-# configure the SQLite database, relative to the app instance folder
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
-# initialize the app with the extension
-db.init_app(app)
+
 
 @app.post("/analyze")
 def construct_game():
@@ -54,6 +53,7 @@ def construct_game():
     game.update({"uuid":uuid})
     game.update({"pgn": pgn})
     game.update({"moves_san": history})
+    # game.update({"analyzed_on":datetime.now()})
 
     # get details about the game from pgn file
     for move in gameFromPGN.mainline_moves():
@@ -67,6 +67,10 @@ def construct_game():
 
     # print(game)
     analyze_game(game)
+
+    
+    advice(analysis)
+
 
     return analysis, 200
 
@@ -107,6 +111,7 @@ def analyze_game(game):
 
     # construct analysis dictionary
     analysis["uuid"]=game["uuid"]
+    analysis["analyzed_on"]=datetime.now()
     analysis["pgn"]=game["pgn"]
     analysis["cp_lost"]=cp_lost
     analysis["move_number_on_cp_lost"]=[]
