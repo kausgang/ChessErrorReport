@@ -20,6 +20,7 @@ import Typography from "@mui/material/Typography";
 import LinearProgress from "@mui/material/LinearProgress";
 import { v4 as uuidv4 } from "uuid";
 import ShowMoves from "./ShowMoves";
+import Advice from "./Advice";
 
 // var engine = new Worker("stockfish.js");
 // const MySwal = withReactContent(Swal);
@@ -35,12 +36,12 @@ function App() {
   const [moves, setMoves] = useState("");
   const [cp, setCp] = useState();
   const [depth, setDepth] = useState(15);
+  const [advice, setAdvice] = useState([]);
 
   // Modal
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [progress, setProgress] = React.useState(0);
 
   const setPlayAs = (event, playas) => {
     event.target.disabled = "true";
@@ -130,6 +131,7 @@ function App() {
   };
 
   const onAnalyze = () => {
+    setAdvice([]);
     // game.pgn()===""?return 0:alert("Play a game");
     if (game.pgn() === "" || game.pgn() === null) alert("Play a game");
     else {
@@ -146,8 +148,9 @@ function App() {
         })
         .then(function (response) {
           handleClose();
-          console.log(response);
+          // console.log(response);
           alert("Analysis successful");
+          setAdvice(response.data.advice);
         })
         .catch(function (error) {
           console.log(error);
@@ -223,6 +226,7 @@ function App() {
           <Button variant="contained" onClick={onAnalyze}>
             Analyze
           </Button>
+          <Advice advice={advice} />
         </Grid>
 
         {/* <MoveTable moves={moves} /> */}

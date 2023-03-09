@@ -2,7 +2,7 @@ import math
 import random
 
 advice_expressions=["","ouch!!","Watch out!","careful","alert!"]
-advice_descriptor=["blunder","mistake","inaccuracy"]
+advice_descriptor=["a blunder","a mistake","an inaccuracy"]
 
 
 def advice(game,analysis,blunder_threshold):
