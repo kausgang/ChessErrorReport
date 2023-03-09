@@ -69,7 +69,7 @@ def construct_game():
     analyze_game(game)
 
     
-    advice(analysis)
+    advice(game,analysis,blunder_threshold)
 
 
     return analysis, 200

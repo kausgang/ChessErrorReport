@@ -51,7 +51,7 @@ function Board(props) {
           //cp was not returned, mate was found
           mate = last_line.input.indexOf("score") + 6;
           mate_in = last_line.input.substring(mate, cp_substr_end);
-          console.log(mate_in);
+          // console.log(mate_in);
         }
 
         let cp_value = last_line.input.substring(

@@ -69,7 +69,7 @@ function App() {
       let best_move = line.data.match(/bestmove\s+(\S+)/);
       let mate = 0,
         mate_in = 0;
-      console.log(last_line);
+
       if (last_line !== null) {
         let cp_substr_start = last_line.input.indexOf("cp") + 3;
         let cp_substr_end = last_line.input.indexOf("nodes") - 1;
@@ -77,7 +77,7 @@ function App() {
           //cp was not returned, mate was found
           mate = last_line.input.indexOf("score") + 6;
           mate_in = last_line.input.substring(mate, cp_substr_end);
-          console.log(mate_in);
+          // console.log(mate_in);
         }
 
         cp_value = last_line.input.substring(cp_substr_start, cp_substr_end);
