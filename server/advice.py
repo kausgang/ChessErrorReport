@@ -6,12 +6,9 @@ advice_descriptor=["a blunder","a mistake","an inaccuracy"]
 
 
 def advice(game,analysis,blunder_threshold):
-    # analysis["advice"].append("this is an advice")
-    # print(game["bestmove"])
-    # print(analysis["move_number_on_cp_lost"])
-    # print(analysis["move_on_cp_lost"])
-    
 
+
+    
     blunders=[]
     for value in analysis["cp_lost"]:
         if abs(value) >= blunder_threshold:

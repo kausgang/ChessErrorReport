@@ -53,7 +53,16 @@ def construct_game():
     game.update({"uuid":uuid})
     game.update({"pgn": pgn})
     game.update({"moves_san": history})
-    # game.update({"analyzed_on":datetime.now()})
+    # construct analysis dictionary
+    analysis["uuid"]=game["uuid"]
+    analysis["analyzed_on"]=datetime.now()
+    analysis["pgn"]=game["pgn"]
+    analysis["cp_lost"]=[]
+    analysis["move_number_on_cp_lost"]=[]
+    analysis["move_on_cp_lost"]=[]
+    analysis["fen_on_cp_lost"]=[]
+    analysis["bestmove_on_cp_lost"]=[]
+    analysis["advice"]=[]
 
     # get details about the game from pgn file
     for move in gameFromPGN.mainline_moves():
@@ -71,6 +80,8 @@ def construct_game():
     
     advice(game,analysis,blunder_threshold)
 
+    # reset the board for next analysis
+    board.reset()
 
     return analysis, 200
 

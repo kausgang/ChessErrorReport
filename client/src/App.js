@@ -150,6 +150,7 @@ function App() {
           handleClose();
           // console.log(response);
           alert("Analysis successful");
+
           setAdvice(response.data.advice);
         })
         .catch(function (error) {
