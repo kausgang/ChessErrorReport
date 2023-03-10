@@ -73,10 +73,12 @@ function Board(props) {
 
         engine.terminate();
 
+        props.updateMoves();
+
         // continue the game by changing side to move
-        sideToMove === "w"
-          ? props.changeSideToMove("b")
-          : props.changeSideToMove("w");
+        // sideToMove === "w"
+        //   ? props.changeSideToMove("b")
+        //   : props.changeSideToMove("w");
       }
     };
   };

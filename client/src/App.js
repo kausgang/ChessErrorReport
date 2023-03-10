@@ -33,7 +33,8 @@ function App() {
   // const [sideToMove, setSideToMove] = useState("w");
   const [gameStarted, setGameStarted] = useState(false);
 
-  const [moves, setMoves] = useState("");
+  // const [moves, setMoves] = useState("");
+  const [moves, setMoves] = useState({});
   const [cp, setCp] = useState();
   const [depth, setDepth] = useState(15);
   const [advice, setAdvice] = useState([]);
@@ -123,7 +124,11 @@ function App() {
   };
 
   const updateMoves = () => {
-    setMoves(game.pgn({ maxWidth: 10, newline: "\n" }));
+    // setMoves(game.pgn({ maxWidth: 10, newline: "\n" }));
+    let pgn = game.pgn();
+    let lastmove = game.history()[game.history().length - 1];
+    let fen = game.fen();
+    setMoves({ pgn, lastmove, fen });
   };
 
   const onSetGameStarted = (isGamgstarted) => {
