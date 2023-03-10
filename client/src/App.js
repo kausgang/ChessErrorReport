@@ -203,7 +203,9 @@ function App() {
         <Grid xs={4}>
           <EngineLevel onsetDepth={onsetDepth} />
           <Status cp_value={cp} game={game} />
+          {/* <Box sx={{ width: 300 }}> */}
           <ShowMoves moves={moves} />
+          {/* </Box> */}
         </Grid>
         <Grid xs={8}>
           <Board
