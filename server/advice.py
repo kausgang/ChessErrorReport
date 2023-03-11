@@ -38,8 +38,8 @@ def advice(game,analysis,blunder_threshold):
             expression=random.choice(advice_expressions)
             descriptor=random.choice(advice_descriptor)
             
-            create_advice="{expression} move-# {formatted_move_number} {move} was {descriptor}. Lost {formatted_cp_lost} points."\
-            .format(expression=expression,formatted_move_number=str(formatted_move_number),move=game["moves_san"][move_number],descriptor=descriptor,formatted_cp_lost=formatted_cp_lost)
+            create_advice="move-# {formatted_move_number} {move} was {descriptor}. Lost {formatted_cp_lost} points. Better was {bestmove}"\
+            .format(expression=expression,formatted_move_number=str(formatted_move_number),move=game["moves_san"][move_number],descriptor=descriptor,formatted_cp_lost=formatted_cp_lost,bestmove=game["bestmove"][move_number])
 
             if(formatted_cp_lost > 1000):
                 create_advice="{expression} move-# {formatted_move_number} {move} was {descriptor}. Moved into mate."\

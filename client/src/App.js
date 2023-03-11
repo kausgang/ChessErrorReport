@@ -239,7 +239,7 @@ function App() {
             <ToggleButton value="black">Play as Black</ToggleButton>
           </ToggleButtonGroup>
           <Button variant="contained" onClick={onAnalyze}>
-            Analyze
+            Find Errors
           </Button>
           <Advice advice={advice} />
         </Grid>

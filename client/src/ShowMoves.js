@@ -22,8 +22,8 @@ function ShowMoves(props) {
 
   // console.log("fen=", fen, "lastmove=", lastmove);
   const getFen = (e) => {
-    // e.preventDefault();
-    console.log(e.target);
+    e.preventDefault();
+
     let move_clicked = e.target.id;
     // find move in lastmove array
     let move_index = lastmove.indexOf(move_clicked);
