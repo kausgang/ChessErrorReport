@@ -38,6 +38,7 @@ function App() {
   const [cp, setCp] = useState();
   const [depth, setDepth] = useState(15);
   const [advice, setAdvice] = useState([]);
+  const [loadfen, setLoadfen] = useState(false);
 
   // Modal
   const [open, setOpen] = React.useState(false);
@@ -135,6 +136,11 @@ function App() {
     setGameStarted(isGamgstarted);
   };
 
+  const onSetFen = (fen) => {
+    game.load(fen);
+    setLoadfen(!loadfen);
+  };
+
   const onAnalyze = () => {
     setAdvice([]);
     // game.pgn()===""?return 0:alert("Play a game");
@@ -204,7 +210,7 @@ function App() {
           <EngineLevel onsetDepth={onsetDepth} />
           <Status cp_value={cp} game={game} />
           {/* <Box sx={{ width: 300 }}> */}
-          <ShowMoves moves={moves} />
+          <ShowMoves moves={moves} setFen={onSetFen} />
           {/* </Box> */}
         </Grid>
         <Grid xs={8}>
@@ -220,6 +226,7 @@ function App() {
             updateMoves={updateMoves}
             gameStarted={gameStarted}
             onSetGameStarted={onSetGameStarted}
+            loadfen={loadfen}
           />
           <ToggleButtonGroup
             color="primary"

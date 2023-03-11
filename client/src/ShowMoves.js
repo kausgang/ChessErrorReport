@@ -5,16 +5,38 @@ import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 
 let pgn = [],
-  fen = [];
+  fen = [],
+  lastmove = [];
 function ShowMoves(props) {
-  console.log(props.moves.lastmove);
-  let lastmove = props.moves.lastmove;
-  fen = props.moves.fen;
+  // console.log(props.moves.pgn, props.moves.fen, props.moves.lastmove);
+  // let lastmove = props.moves.lastmove;
+  // fen = props.moves.fen;
 
-  if (props.moves.pgn === undefined) pgn = [];
-  else {
+  if (props.moves.fen !== undefined) fen.push(props.moves.fen);
+  if (props.moves.pgn !== undefined) {
     pgn = props.moves.pgn.split(" ");
+    // console.log(pgn);
   }
+
+  if (props.moves.lastmove !== undefined) lastmove.push(props.moves.lastmove);
+
+  // console.log("fen=", fen, "lastmove=", lastmove);
+  const getFen = (e) => {
+    // e.preventDefault();
+    console.log(e.target);
+    let move_clicked = e.target.id;
+    // find move in lastmove array
+    let move_index = lastmove.indexOf(move_clicked);
+
+    if (move_index !== -1) {
+      // get the fen from fen array for the move clicked
+      let clicked_fen = fen[move_index];
+
+      props.setFen(clicked_fen);
+
+      // console.log(move_index);
+    }
+  };
 
   // console.log(pgn, fen);
   return (
@@ -25,16 +47,18 @@ function ShowMoves(props) {
       {/* {props.moves.replaceAll(" ", "  ----  ").replaceAll(".  ----", ".  ")} */}
       <Box sx={{ width: 500 }}>
         <Stack direction="row" spacing={1} sx={{ flexWrap: "wrap" }}>
-          {pgn.map((move) => {
+          {pgn.map((move, index) => {
             // if (move.indexOf(".") !== -1) return move;
             // else return move + "\n";
 
             return (
-              <span>
-                <Typography variant="h6" gutterBottom>
+              <div key={index} onClick={getFen}>
+                {/* <Typography variant="h6" gutterBottom> */}
+                <a id={move} href="#">
                   {move}
-                </Typography>
-              </span>
+                </a>
+                {/* </Typography> */}
+              </div>
             );
             // else
             //   return (
