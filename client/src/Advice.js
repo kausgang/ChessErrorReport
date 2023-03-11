@@ -9,6 +9,12 @@ import ListItemText from "@mui/material/ListItemText";
 // import DraftsIcon from "@mui/icons-material/Drafts";
 
 function Advice(props) {
+  if (props.advice.length === 0 && props.analysisComplete)
+    return (
+      <ul>
+        <li>No Errors Found</li>
+      </ul>
+    );
   const listItems = props.advice.map((advice, index) => (
     <li key={index}>{advice}</li>
   ));

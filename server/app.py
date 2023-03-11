@@ -13,7 +13,7 @@ from datetime import datetime
 stockfish = Stockfish(
     path="./STOCKFISH/stockfish-windows-2022-x86-64-avx2.exe")
 engine_analysis_time = 1000
-blunder_threshold=200 #in centipawn value
+blunder_threshold=100 #in centipawn value
 # hold analysis here
 analysis={"advice":[]}
 board = chess.Board()
@@ -45,6 +45,7 @@ def construct_game():
     uuid=incoming_data['uuid']
     pgn = incoming_data['pgn']
     history = incoming_data['history']
+    blunder_threshold=incoming_data['blunderThreshold']
 
     # input pgn sent by client into the chess object
     gameFromPGN = chess.pgn.read_game(io.StringIO(pgn))

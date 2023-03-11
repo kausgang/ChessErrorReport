@@ -7,7 +7,8 @@ function Board(props) {
   const [fen, setFen] = useState("start");
   const [history, setHistory] = useState([]);
   const [pgn, setPgn] = useState("");
-  let depth = 10;
+  // let depth = 10;
+  let depth = props.evaluationDepth;
 
   useEffect(() => {
     setFen(props.game.fen());

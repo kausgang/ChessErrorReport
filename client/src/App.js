@@ -21,6 +21,9 @@ import LinearProgress from "@mui/material/LinearProgress";
 import { v4 as uuidv4 } from "uuid";
 import ShowMoves from "./ShowMoves";
 import Advice from "./Advice";
+import Stack from "@mui/material/Stack";
+import BlunderThreshold from "./BlunderThreshold";
+import EvaluationDepth from "./EvaluationDepth";
 
 // var engine = new Worker("stockfish.js");
 // const MySwal = withReactContent(Swal);
@@ -39,6 +42,9 @@ function App() {
   const [depth, setDepth] = useState(15);
   const [advice, setAdvice] = useState([]);
   const [loadfen, setLoadfen] = useState(false);
+  const [evaluationDepth, setEvaluationDepth] = useState(10);
+  const [blunderThreshold, setBlunderThreshold] = useState(100);
+  const [analysisComplete, setAnalysisComplete] = useState(false);
 
   // Modal
   const [open, setOpen] = React.useState(false);
@@ -141,6 +147,13 @@ function App() {
     setLoadfen(!loadfen);
   };
 
+  const onsetBlunderThresold = (blunderThreshold) => {
+    setBlunderThreshold(blunderThreshold);
+  };
+
+  const onsetEvaluationDepth = (evaluationDepth) =>
+    setEvaluationDepth(evaluationDepth);
+
   const onAnalyze = () => {
     setAdvice([]);
     // game.pgn()===""?return 0:alert("Play a game");
@@ -149,6 +162,8 @@ function App() {
       // open modal
       handleOpen();
 
+      setAnalysisComplete(false);
+
       // create uuid for the game
       let uuid = uuidv4();
       axios
@@ -156,12 +171,15 @@ function App() {
           uuid: uuid,
           pgn: game.pgn(),
           history: game.history(),
+          blunderThreshold,
         })
         .then(function (response) {
           handleClose();
           // console.log(response);
           alert("Analysis successful");
 
+          console.log(response.data);
+          setAnalysisComplete(true);
           setAdvice(response.data.advice);
         })
         .catch(function (error) {
@@ -207,8 +225,14 @@ function App() {
 
       <Grid container spacing={"20%"}>
         <Grid xs={4}>
-          <EngineLevel onsetDepth={onsetDepth} />
+          <Stack direction="row" spacing={2}>
+            <EngineLevel onsetDepth={onsetDepth} />
+            <EvaluationDepth onsetEvaluationDepth={onsetEvaluationDepth} />
+            <BlunderThreshold onsetBlunderThresold={onsetBlunderThresold} />
+          </Stack>
+          <hr />
           <Status cp_value={cp} game={game} />
+          <hr />
           {/* <Box sx={{ width: 300 }}> */}
           <ShowMoves moves={moves} setFen={onSetFen} />
           {/* </Box> */}
@@ -227,6 +251,7 @@ function App() {
             gameStarted={gameStarted}
             onSetGameStarted={onSetGameStarted}
             loadfen={loadfen}
+            evaluationDepth={evaluationDepth}
           />
           <ToggleButtonGroup
             color="primary"
@@ -241,7 +266,7 @@ function App() {
           <Button variant="contained" onClick={onAnalyze}>
             Find Errors
           </Button>
-          <Advice advice={advice} />
+          <Advice advice={advice} analysisComplete={analysisComplete} />
         </Grid>
 
         {/* <MoveTable moves={moves} /> */}
