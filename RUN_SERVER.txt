@@ -6,6 +6,6 @@ cd .venv/Scripts
 activate
 
 #AFTER THE VIRTUAL ENVIRONMENT HAS BEEN ACTIVATED, RUN BELOW
-cd ../
+cd ../..
 pip install -r requirements.txt
 flask run
