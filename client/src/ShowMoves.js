@@ -24,6 +24,11 @@ function ShowMoves(props) {
   const getFen = (e) => {
     e.preventDefault();
 
+    if (!props.gameover) {
+      alert("end the game");
+      return 1;
+    }
+
     let move_clicked = e.target.id;
     // find move in lastmove array
     let move_index = lastmove.indexOf(move_clicked);
@@ -45,7 +50,7 @@ function ShowMoves(props) {
       {/* <Typography variant="h6" gutterBottom> */}
       {/* {props.moves.replaceAll(" ", "  --  ")} */}
       {/* {props.moves.replaceAll(" ", "  ----  ").replaceAll(".  ----", ".  ")} */}
-      <Box sx={{ width: 500 }}>
+      <Box sx={{ width: 300 }}>
         <Stack direction="row" spacing={1} sx={{ flexWrap: "wrap" }}>
           {pgn.map((move, index) => {
             // if (move.indexOf(".") !== -1) return move;

@@ -32,7 +32,7 @@ function App() {
   const [game, setGame] = useState(new Chess());
   const [fen, setFen] = useState("start");
   const [orientation, setOrientation] = useState("white");
-  const [engineMove, setEngineMove] = useState("");
+  // const [engineMove, setEngineMove] = useState("");
   // const [sideToMove, setSideToMove] = useState("w");
   const [gameStarted, setGameStarted] = useState(false);
 
@@ -45,6 +45,10 @@ function App() {
   const [evaluationDepth, setEvaluationDepth] = useState(10);
   const [blunderThreshold, setBlunderThreshold] = useState(100);
   const [analysisComplete, setAnalysisComplete] = useState(false);
+  const [gameover, setGameover] = useState(false);
+  const [pgn, setPgn] = useState("");
+  const [history, setHistory] = useState([]);
+  const [draggable, setDraggable] = useState(true);
 
   // Modal
   const [open, setOpen] = React.useState(false);
@@ -154,8 +158,20 @@ function App() {
   const onsetEvaluationDepth = (evaluationDepth) =>
     setEvaluationDepth(evaluationDepth);
 
+  const onGameover = () => {
+    setGameover(true);
+    setDraggable(false);
+    setPgn(game.pgn());
+    setHistory(game.history());
+  };
+
   const onAnalyze = () => {
+    if (!gameover) {
+      alert("end the game first");
+      return 1;
+    }
     setAdvice([]);
+
     // game.pgn()===""?return 0:alert("Play a game");
     if (game.pgn() === "" || game.pgn() === null) alert("Play a game");
     else {
@@ -168,9 +184,11 @@ function App() {
       let uuid = uuidv4();
       axios
         .post("http://localhost:5000/analyze", {
-          uuid: uuid,
-          pgn: game.pgn(),
-          history: game.history(),
+          uuid,
+          // pgn: game.pgn(),
+          // history: game.history(),
+          pgn,
+          history,
           blunderThreshold,
         })
         .then(function (response) {
@@ -234,7 +252,7 @@ function App() {
           <Status cp_value={cp} game={game} />
           <hr />
           {/* <Box sx={{ width: 300 }}> */}
-          <ShowMoves moves={moves} setFen={onSetFen} />
+          <ShowMoves moves={moves} setFen={onSetFen} gameover={gameover} />
           {/* </Box> */}
         </Grid>
         <Grid xs={8}>
@@ -252,6 +270,7 @@ function App() {
             onSetGameStarted={onSetGameStarted}
             loadfen={loadfen}
             evaluationDepth={evaluationDepth}
+            draggable={draggable}
           />
           <ToggleButtonGroup
             color="primary"
@@ -263,7 +282,21 @@ function App() {
             {/* <ToggleButton value="white">white</ToggleButton> */}
             <ToggleButton value="black">Play as Black</ToggleButton>
           </ToggleButtonGroup>
-          <Button variant="contained" onClick={onAnalyze}>
+          <ToggleButtonGroup
+            color="primary"
+            value={orientation}
+            exclusive
+            onChange={onGameover}
+            disabled={gameover ? true : false}
+          >
+            {/* <ToggleButton value="white">white</ToggleButton> */}
+            <ToggleButton value="black">End Game</ToggleButton>
+          </ToggleButtonGroup>
+          <Button
+            variant="contained"
+            onClick={onAnalyze}
+            disabled={analysisComplete ? true : false}
+          >
             Find Errors
           </Button>
           <Advice advice={advice} analysisComplete={analysisComplete} />
