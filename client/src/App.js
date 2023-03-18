@@ -49,6 +49,7 @@ function App() {
   const [pgn, setPgn] = useState("");
   const [history, setHistory] = useState([]);
   const [draggable, setDraggable] = useState(true);
+  const [isGameOver, setIsGameOver] = useState("");
 
   // Modal
   const [open, setOpen] = React.useState(false);
@@ -161,6 +162,9 @@ function App() {
   const onGameover = () => {
     setGameover(true);
     setDraggable(false);
+    setIsGameOver("gameover");
+    //if game ended before making any move  disable "play as black" button
+    setGameStarted(true);
     setPgn(game.pgn());
     setHistory(game.history());
   };
@@ -284,13 +288,13 @@ function App() {
           </ToggleButtonGroup>
           <ToggleButtonGroup
             color="primary"
-            value={orientation}
+            value={isGameOver}
             exclusive
             onChange={onGameover}
-            disabled={gameover ? true : false}
+            // disabled={gameover ? true : false}
           >
             {/* <ToggleButton value="white">white</ToggleButton> */}
-            <ToggleButton value="black">End Game</ToggleButton>
+            <ToggleButton value="gameover">End Game</ToggleButton>
           </ToggleButtonGroup>
           <Button
             variant="contained"
